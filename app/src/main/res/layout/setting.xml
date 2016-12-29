@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:padding="2dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Location"
+        android:textSize="@dimen/texsize_items"
+        android:id="@+id/tv_location"
+        android:textColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:padding="2dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="9965965"
+        android:textColor="@color/colorGreyDark"
+        android:textSize="@dimen/texsize"
+        android:id="@+id/tv_location_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:background="@color/colorGreyView"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+    <TextView
+        android:padding="2dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="Temperature Units"
+        android:textSize="@dimen/texsize_items"
+        android:id="@+id/tv_temperature_units"
+        android:textColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:padding="2dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="9965965"
+        android:textColor="@color/colorGreyDark"
+        android:textSize="@dimen/texsize"
+        android:id="@+id/tv_units"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:background="@color/colorGreyView"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+</LinearLayout>
