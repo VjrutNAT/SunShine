@@ -9,7 +9,18 @@ public class Weather {
     private String status;
     private String temperutare_from;
     private String temperutare_to;
+    private String humidity;
+    private String pressure;
+    private String wind;
     private int id;
+
+
+    public Weather(String day, String status, String temperutare_from, String temperutare_to) {
+        this.day = day;
+        this.status = status;
+        this.temperutare_from = temperutare_from;
+        this.temperutare_to = temperutare_to;
+    }
 
     public Weather(String day, String status, String temperutare_from, String temperutare_to, int id) {
         this.day = day;
@@ -17,6 +28,43 @@ public class Weather {
         this.temperutare_from = temperutare_from;
         this.temperutare_to = temperutare_to;
         this.id = id;
+    }
+
+    public Weather(String day, String status, String temperutare_from, String temperutare_to, String humidity, String pressure, String wind, int id) {
+        this.day = day;
+        this.status = status;
+        this.temperutare_from = temperutare_from;
+        this.temperutare_to = temperutare_to;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.wind = wind;
+        this.id = id;
+    }
+
+
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
+    }
+
+    public String getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(String pressure) {
+        this.pressure = pressure;
+    }
+
+    public String getWind() {
+        return wind;
+    }
+
+    public void setWind(String wind) {
+        this.wind = wind;
     }
 
     public String getDay() {
