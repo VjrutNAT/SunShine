@@ -22,7 +22,7 @@
         android:text="9965965"
         android:textColor="@color/colorGreyDark"
         android:textSize="@dimen/texsize"
-        android:id="@+id/tv_location_code"
+        android:id="@+id/tv_location_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <View

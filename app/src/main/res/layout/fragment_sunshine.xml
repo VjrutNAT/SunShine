@@ -6,10 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.demo.vjrutnat.sunshine.SunShine.MainActivity">
 
+
+
     <ScrollView
         android:id="@+id/scv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,7 +40,6 @@
                         android:gravity="center"
                         android:paddingBottom="4dp"
                         android:paddingTop="@dimen/activity_horizontal_margin"
-                        android:text="Today, June 21"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/texsize" />
 
@@ -46,7 +50,6 @@
                         android:layout_below="@id/tv_date"
                         android:gravity="center"
                         android:padding="4dp"
-                        android:text="21"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/numbersize_weather_details" />
 
@@ -57,37 +60,37 @@
                         android:layout_below="@id/tv_temperature_from"
                         android:gravity="center"
                         android:paddingBottom="@dimen/activity_horizontal_margin"
-                        android:text="13"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/numbersize" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="140dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:weightSum="1">
 
                     <ImageView
-                        android:id="@+id/imv_show"
+                        android:id="@+id/imv_weather"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="32dp"
                         android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        android:src="@mipmap/ic_launcher" />
+                        android:layout_weight="0.18" />
+
                     <TextView
                         android:id="@+id/tv_static"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:layout_marginBottom="30dp"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
                         android:gravity="center"
-                        android:text="clouds"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/texsize" />
-
+                        android:textSize="@dimen/texsize"
+                        android:layout_weight="0.29" />
 
 
                 </LinearLayout>
@@ -106,5 +109,10 @@
 
     </ScrollView>
 
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

@@ -6,27 +6,29 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.demo.vjrutnat.sunshine.Adapter.WeatherAdapter;
 import com.demo.vjrutnat.sunshine.Items.Weather;
 import com.demo.vjrutnat.sunshine.R;
 import com.demo.vjrutnat.sunshine.Utils.UrlWeather;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 /**
@@ -35,14 +37,16 @@ import java.util.TimeZone;
 
 public class SunShine extends Fragment {
 
-    private OnShowDetailsListener dCallBack;
-    private ArrayList<Weather> data;
-    private RecyclerView recyclerView;
+    public static final String TAG = SunShine.class.getName();
+    public static OnShowDetailsListener mCallBackShowDetails;
+    private ArrayList<Weather> mData;
+    private RecyclerView mRecyclerView;
+    private ProgressBar mPrgLoad;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        dCallBack = (OnShowDetailsListener) context;
+        mCallBackShowDetails = (OnShowDetailsListener) context;
     }
 
     public static SunShine newInstance() {
@@ -54,14 +58,17 @@ public class SunShine extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sunshine, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rcv_information);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
 
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcv_information);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mPrgLoad = (ProgressBar) view.findViewById(R.id.pb_load);
         final TextView tvDate = (TextView) view.findViewById(R.id.tv_date);
         final TextView tvTempMax = (TextView) view.findViewById(R.id.tv_temperature_to);
         final TextView tvTempMin = (TextView) view.findViewById(R.id.tv_temperature_from);
         final TextView tvClouds = (TextView) view.findViewById(R.id.tv_static);
+        final ImageView imvWeather = (ImageView) view.findViewById(R.id.imv_weather);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(UrlWeather.CURRENT_WEATHER_URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -69,6 +76,7 @@ public class SunShine extends Fragment {
                 JSONArray weather = response.optJSONArray("weather");
                 JSONObject clouds = weather.optJSONObject(0);
                 String description = clouds.optString("description");
+                String icon = clouds.optString("icon");
                 String date = response.optString("dt");
                 JSONObject temperature = response.optJSONObject("main");
                 int temperatureMax = temperature.optInt("temp_max");
@@ -77,17 +85,18 @@ public class SunShine extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 TimeZone tz = TimeZone.getDefault();
                 calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date currentTimeZone=new java.util.Date((long)Integer.parseInt(date)*1000);
+                java.util.Date currentTimeZone = new java.util.Date((long) Integer.parseInt(date) * 1000);
                 calendar.setTime(currentTimeZone);
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
 
                 int tempMax = temperatureMax - 273;
                 int tempMin = temperatureMin - 273;
-                tvDate.setText(getDayName(dayOfWeek));
+                tvDate.setText("Today, " + getMonthName(month) + " " + day);
                 tvClouds.setText(description);
                 tvTempMax.setText("" + tempMax + "℃");
                 tvTempMin.setText("" + tempMin + "℃");
+                Picasso.with(getActivity()).load(UrlWeather.ICON_WEATHER_URL + icon + ".png").into(imvWeather);
 
             }
         }, new Response.ErrorListener() {
@@ -98,13 +107,13 @@ public class SunShine extends Fragment {
         });
 
         AppController.newInstance().addRequestQueue(jsonObjectRequest, "currentweather");
-        data = new ArrayList<>();
+        mData = new ArrayList<>();
         JsonObjectRequest objectRequest = new JsonObjectRequest(UrlWeather.WEEK_WEATHER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                for (int i = 0 ; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
                     JSONArray list = response.optJSONArray("list");
-                    JSONObject obj = list.optJSONObject(i+1);
+                    JSONObject obj = list.optJSONObject(i + 1);
                     String date = obj.optString("dt");
                     JSONObject temp = obj.optJSONObject("temp");
                     int tempMax = temp.optInt("max");
@@ -115,21 +124,29 @@ public class SunShine extends Fragment {
                     JSONArray weather = obj.optJSONArray("weather");
                     JSONObject objWeather = weather.optJSONObject(0);
                     String clouds = objWeather.optString("description");
+                    String icon = objWeather.optString("icon");
+
 
                     Calendar calendar = Calendar.getInstance();
                     TimeZone tz = TimeZone.getDefault();
                     calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    java.util.Date currentTimeZone=new java.util.Date((long)Integer.parseInt(date)*1000);
+                    java.util.Date currentTimeZone = new java.util.Date((long) Integer.parseInt(date) * 1000);
                     calendar.setTime(currentTimeZone);
                     int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int month = calendar.get(Calendar.MONTH);
                     int temperatureMax = tempMax - 273;
                     int temperatureMin = tempMin - 273;
-                    Weather weekWeather = new Weather(getDayName(dayOfWeek),clouds,temperatureMin + "℃",temperatureMax + "℃");
-                    data.add(weekWeather);
+                    String dateFormat = getMonthName(month) + " " + day;
+                    Weather weatherDetails = new Weather(getDayName(dayOfWeek), clouds, temperatureMax + "℃", temperatureMin + "℃", humidity + "",
+                            pressure + "", speed + "", icon, dateFormat);
+                    mData.add(weatherDetails);
                 }
-                WeatherAdapter adapter = new WeatherAdapter(getActivity(), data);
-                recyclerView.setAdapter(adapter);
+                WeatherAdapter adapter = new WeatherAdapter(getActivity(), mData);
+                mRecyclerView.setAdapter(adapter);
+
+                mPrgLoad.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -138,16 +155,17 @@ public class SunShine extends Fragment {
             }
         });
         AppController.newInstance().addRequestQueue(objectRequest, "weekweather");
-
         return view;
     }
 
     public interface OnShowDetailsListener {
-        void onShowDetails();
+        void onShowDetails(String mDay, String mStatus, String mTempMax, String mTempMin, String mIcon, String mHumidity,
+                           String mPressure, String mWind, String mDate);
+
     }
 
-    public static String getDayName(int day){
-        switch(day){
+    private String getDayName(int day) {
+        switch (day) {
             case 1:
                 return "Sunday";
             case 2:
@@ -159,12 +177,42 @@ public class SunShine extends Fragment {
             case 5:
                 return "Thursday";
             case 6:
-                return  "Friday";
+                return "Friday";
             case 7:
                 return "Saturday";
         }
 
-        return "Worng Day";
+        return "Wrong Day";
+    }
+
+    private String getMonthName(int month) {
+        switch (month) {
+            case 0:
+                return "January";
+            case 1:
+                return "February";
+            case 2:
+                return "March";
+            case 3:
+                return "April";
+            case 4:
+                return "May";
+            case 5:
+                return "June";
+            case 6:
+                return "July";
+            case 7:
+                return "August";
+            case 8:
+                return "September";
+            case 9:
+                return "October";
+            case 10:
+                return "November";
+            case 11:
+                return "December";
+        }
+        return "Wrong month";
     }
 
 }

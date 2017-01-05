@@ -6,7 +6,6 @@
 
     <TextView
         android:textColor="@color/colorBlack"
-        android:text="Saturday"
         android:id="@+id/tv_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +15,6 @@
         android:textSize="@dimen/texsize_items" />
 
     <TextView
-        android:text="June 28"
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +39,6 @@
 
             <TextView
                 android:gravity="center"
-                android:text="14"
                 android:textColor="@color/colorBlack"
                 android:id="@+id/tv_temperature_from"
                 android:layout_width="match_parent"
@@ -50,7 +47,6 @@
                 android:textSize="@dimen/numbersize_weather_details" />
             <TextView
                 android:gravity="center"
-                android:text="14"
                 android:id="@+id/tv_temperature_to"
                 android:padding="@dimen/padding"
                 android:textColor="@color/colorBlack"
@@ -65,12 +61,10 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <ImageView
-                android:src="@mipmap/ic_launcher"
                 android:id="@+id/imv_weather"
                 android:layout_width="match_parent"
                 android:layout_height="97dp" />
             <TextView
-                android:text="clounds"
                 android:gravity="center"
                 android:id="@+id/tv_clouds"
                 android:padding="@dimen/padding"

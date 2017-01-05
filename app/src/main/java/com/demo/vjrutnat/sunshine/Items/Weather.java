@@ -12,8 +12,16 @@ public class Weather {
     private String humidity;
     private String pressure;
     private String wind;
-    private int id;
+    private String id;
+    private String date;
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public Weather(String day, String status, String temperutare_from, String temperutare_to) {
         this.day = day;
@@ -22,15 +30,7 @@ public class Weather {
         this.temperutare_to = temperutare_to;
     }
 
-    public Weather(String day, String status, String temperutare_from, String temperutare_to, int id) {
-        this.day = day;
-        this.status = status;
-        this.temperutare_from = temperutare_from;
-        this.temperutare_to = temperutare_to;
-        this.id = id;
-    }
-
-    public Weather(String day, String status, String temperutare_from, String temperutare_to, String humidity, String pressure, String wind, int id) {
+    public Weather(String day, String status, String temperutare_from, String temperutare_to, String humidity, String pressure, String wind, String id, String date) {
         this.day = day;
         this.status = status;
         this.temperutare_from = temperutare_from;
@@ -39,9 +39,8 @@ public class Weather {
         this.pressure = pressure;
         this.wind = wind;
         this.id = id;
+        this.date = date;
     }
-
-
 
     public String getHumidity() {
         return humidity;
@@ -99,11 +98,19 @@ public class Weather {
         this.temperutare_to = temperutare_to;
     }
 
-    public int getId() {
+    public Weather(String day, String status, String temperutare_from, String temperutare_to, String id) {
+        this.day = day;
+        this.status = status;
+        this.temperutare_from = temperutare_from;
+        this.temperutare_to = temperutare_to;
+        this.id = id;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

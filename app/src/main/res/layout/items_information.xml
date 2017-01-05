@@ -10,8 +10,7 @@
         android:id="@+id/imv_static"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_weight="4" />
 
     <RelativeLayout
         android:id="@+id/rl_information"
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:padding="@dimen/padding"
-            android:text="đasadsd"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/texsize_items" />
 
@@ -36,9 +34,8 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@id/tv_day"
             android:padding="@dimen/padding"
-            android:text="đasadsd"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/texsize" />
+            android:textSize="@dimen/textsize_item" />
 
         <TextView
             android:id="@+id/tv_temperature_from"
@@ -46,7 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:padding="@dimen/padding"
-            android:text="đasadsd"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/texsize_items" />
 
@@ -57,9 +53,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_temperature_from"
             android:padding="@dimen/padding"
-            android:text="đasadsd"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/texsize" />
+            android:textSize="@dimen/textsize_item" />
 
     </RelativeLayout>
 
