@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 public class FragmentDetails extends Fragment {
 
     public static final String TAG = FragmentDetails.class.getName();
-    public OnShowSettingListener mCallBackShowSetting;
 
     private static final String DAY = "day";
     private static final String STATUS = "status";
@@ -44,11 +43,6 @@ public class FragmentDetails extends Fragment {
     private String mPressure;
     private String mWind;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mCallBackShowSetting = (OnShowSettingListener) context;
-    }
 
     public FragmentDetails() {
     }
@@ -113,9 +107,4 @@ public class FragmentDetails extends Fragment {
         return view;
     }
 
-
-
-    public interface OnShowSettingListener{
-        void onShowSetting();
-    }
 }

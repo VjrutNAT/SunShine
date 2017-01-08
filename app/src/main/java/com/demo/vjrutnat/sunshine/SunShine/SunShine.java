@@ -1,6 +1,8 @@
 package com.demo.vjrutnat.sunshine.SunShine;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,9 +28,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -42,6 +47,13 @@ public class SunShine extends Fragment {
     private ArrayList<Weather> mData;
     private RecyclerView mRecyclerView;
     private ProgressBar mPrgLoad;
+    private static final String LON = "lon";
+    private static final String LAT = "lat";
+    private String mLon;
+    private String mLat;
+
+    public SunShine() {
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -49,9 +61,27 @@ public class SunShine extends Fragment {
         mCallBackShowDetails = (OnShowDetailsListener) context;
     }
 
-    public static SunShine newInstance() {
+    public static SunShine newInstance(String lon, String lat) {
         SunShine sunShine = new SunShine();
+        Bundle bundle = new Bundle();
+        bundle.putString(LON, lon);
+        bundle.putString(LAT, lat);
+
+        sunShine.setArguments(bundle);
         return sunShine;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            mLon = bundle.getString(LON);
+            mLat = bundle.getString(LAT);
+            Log.d("lon", mLon);
+            Log.d("lat", mLat);
+        }
+
     }
 
     @Nullable
@@ -70,7 +100,7 @@ public class SunShine extends Fragment {
         final TextView tvClouds = (TextView) view.findViewById(R.id.tv_static);
         final ImageView imvWeather = (ImageView) view.findViewById(R.id.imv_weather);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(UrlWeather.CURRENT_WEATHER_URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(UrlWeather.locationWeatherUrl(mLon, mLat), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 JSONArray weather = response.optJSONArray("weather");
@@ -81,6 +111,7 @@ public class SunShine extends Fragment {
                 JSONObject temperature = response.optJSONObject("main");
                 int temperatureMax = temperature.optInt("temp_max");
                 int temperatureMin = temperature.optInt("temp_min");
+                String city = response.optString("name");
 
                 Calendar calendar = Calendar.getInstance();
                 TimeZone tz = TimeZone.getDefault();
@@ -92,7 +123,7 @@ public class SunShine extends Fragment {
 
                 int tempMax = temperatureMax - 273;
                 int tempMin = temperatureMin - 273;
-                tvDate.setText("Today, " + getMonthName(month) + " " + day);
+                tvDate.setText(city + ", Today, " + getMonthName(month) + " " + day);
                 tvClouds.setText(description);
                 tvTempMax.setText("" + tempMax + "℃");
                 tvTempMin.setText("" + tempMin + "℃");
@@ -108,7 +139,7 @@ public class SunShine extends Fragment {
 
         AppController.newInstance().addRequestQueue(jsonObjectRequest, "currentweather");
         mData = new ArrayList<>();
-        JsonObjectRequest objectRequest = new JsonObjectRequest(UrlWeather.WEEK_WEATHER_URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(UrlWeather.locationWeekWeatherUrl(mLon, mLat), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 for (int i = 0; i < response.length(); i++) {

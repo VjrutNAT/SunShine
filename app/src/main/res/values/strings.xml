@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">SunShine</string>
-    <string name="action_map">See location on map</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_location">Location</string>
 </resources>

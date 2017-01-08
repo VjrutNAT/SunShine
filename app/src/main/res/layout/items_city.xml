@@ -7,8 +7,8 @@
         android:id="@+id/tv_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding"
-        android:textColor="@color/colorWhite"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorBlack"
         android:textSize="@dimen/textsize_city" />
 
     <TextView
@@ -22,10 +22,4 @@
         android:textSize="@dimen/texsize"
         android:visibility="gone" />
 
-    <View
-
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view"
-        android:layout_below="@id/tv_city_id"
-        android:background="@color/grey_700" />
 </RelativeLayout>
