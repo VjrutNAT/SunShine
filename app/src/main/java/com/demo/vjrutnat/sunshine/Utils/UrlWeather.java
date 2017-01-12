@@ -20,4 +20,9 @@ public class UrlWeather {
         return url;
     }
 
+    public static final String locationCity(String lon , String lat){
+        String url = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+ lat + "," + lon + "&sensor=true";
+        return url;
+    }
+
 }
