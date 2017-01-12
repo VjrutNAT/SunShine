@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements FragmentLocation.
         FragmentLocation fragmentLocation = FragmentLocation.newInstance();
         transaction.replace(R.id.container, fragmentLocation);
         transaction.commit();
+
     }
 
     @Override
