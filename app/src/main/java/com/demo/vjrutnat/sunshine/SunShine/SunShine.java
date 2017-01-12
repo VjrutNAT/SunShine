@@ -1,9 +1,8 @@
 package com.demo.vjrutnat.sunshine.SunShine;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -29,12 +27,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -52,7 +46,9 @@ public class SunShine extends Fragment {
     private static final String LAT = "lat";
     private String mLon;
     private String mLat;
-    private String city;
+    private int mDay;
+    private int mMonth;
+    private String mCityName;
 
     public SunShine() {
     }
@@ -101,24 +97,6 @@ public class SunShine extends Fragment {
         final TextView tvTempMin = (TextView) view.findViewById(R.id.tv_temperature_from);
         final TextView tvClouds = (TextView) view.findViewById(R.id.tv_static);
         final ImageView imvWeather = (ImageView) view.findViewById(R.id.imv_weather);
-//
-//        JsonObjectRequest jsonObject = new JsonObjectRequest(UrlWeather.locationCity(mLon, mLat), null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                JSONArray arrayCity = response.optJSONArray("results");
-//                JSONObject objCity = arrayCity.optJSONObject(0);
-//                JSONArray arrayInnerCity = objCity.optJSONArray("address_components");
-//                JSONObject nameCity = arrayInnerCity.optJSONObject(5);
-//                String city = nameCity.optString("short_name");
-//                Log.d("name city" ,  city.toString());
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//        AppController.newInstance().addRequestQueue(jsonObject, "namecity");
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(UrlWeather.locationWeatherUrl(mLon, mLat), null, new Response.Listener<JSONObject>() {
@@ -132,23 +110,50 @@ public class SunShine extends Fragment {
                 JSONObject temperature = response.optJSONObject("main");
                 int temperatureMax = temperature.optInt("temp_max");
                 int temperatureMin = temperature.optInt("temp_min");
-                String city = response.optString("name");
 
                 Calendar calendar = Calendar.getInstance();
                 TimeZone tz = TimeZone.getDefault();
                 calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
                 java.util.Date currentTimeZone = new java.util.Date((long) Integer.parseInt(date) * 1000);
                 calendar.setTime(currentTimeZone);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH);
+                mDay = calendar.get(Calendar.DAY_OF_MONTH);
+                mMonth = calendar.get(Calendar.MONTH);
 
                 int tempMax = temperatureMax - 273;
                 int tempMin = temperatureMin - 273;
-                tvDate.setText(city + ", Today, " + getMonthName(month) + " " + day);
                 tvClouds.setText(description);
                 tvTempMax.setText("" + tempMax + "℃");
                 tvTempMin.setText("" + tempMin + "℃");
                 Picasso.with(getActivity()).load(UrlWeather.ICON_WEATHER_URL + icon + ".png").into(imvWeather);
+
+                JsonObjectRequest jsonObject = new JsonObjectRequest(UrlWeather.locationCity(mLon, mLat), null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        JSONArray arrayCity = response.optJSONArray("results");
+                        JSONObject objCity = arrayCity.optJSONObject(0);
+                        JSONArray arrayInnerCity = objCity.optJSONArray("address_components");
+                        for (int i = 0 ; i < arrayInnerCity.length() ; i++ ){
+                            JSONObject zero = arrayInnerCity.optJSONObject(i);
+                            String address = zero.optString("long_name");
+                            JSONArray types = zero.optJSONArray("types");
+                            String localCity = types.optString(0);
+                            if (localCity.equals("locality")){
+                                mCityName = address.replace("City","");
+                                Log.d(TAG, "sity" + mCityName);
+                            }
+                        }
+                        tvDate.setText(mCityName + ", Today, " + getMonthName(mMonth) + " " + mDay);
+                        Log.d(TAG, getMonthName(mMonth) +"");
+                        Log.d(TAG, mDay +"");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+                AppController.newInstance().addRequestQueue(jsonObject, "namecity");
 
             }
         }, new Response.ErrorListener() {
@@ -206,9 +211,7 @@ public class SunShine extends Fragment {
 
             }
         });
-        AppController.newInstance().
-
-                addRequestQueue(objectRequest, "weekweather");
+        AppController.newInstance().addRequestQueue(objectRequest, "weekweather");
 
         return view;
     }
@@ -269,5 +272,6 @@ public class SunShine extends Fragment {
         }
         return "Wrong month";
     }
+
 
 }
